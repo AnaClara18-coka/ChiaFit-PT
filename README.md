@@ -1,8 +1,12 @@
 # ChiaFit Portugal
 
-Versão da oferta do Método Chia destinada a Portugal, mantendo os textos em português brasileiro e publicada via GitHub Pages.
+Versão da oferta do Método Chia destinada a Portugal, mantendo os textos em português brasileiro. O código está no GitHub e a publicação de produção é feita pela Vercel.
 
-## Domínio
+## Site publicado
+
+`https://chiafit-pt-vitrine-digital.vercel.app`
+
+## Domínio previsto
 
 `metodochiapt.astroluz.site`
 
