@@ -706,10 +706,8 @@ const CONFIG = {
   vslFinalB: { player: 'xfn7stfyt6', revealAt: 260 },
 
   /* ===== OFERTAS POR VARIANTE ==========================================
-     Checkouts separados por variante desde 19/08/2026 (teste #3) — hoje são
-     infraestrutura permanente: A usa os links originais e B os próprios,
-     todos em Pix com split=12, e é isso que permite atribuir VENDA por
-     variante no checkout em qualquer teste (como o #4, da ordem das perguntas).
+     Cada plano usa seu checkout da Cakto nas duas variantes. A atribuição da
+     variante continua preservada pelas classes e eventos próprios do funil.
 
      Mesmos dois produtos do teste #1, repreçados: Completo R$97→R$47 e
      Premium R$197→R$97.
@@ -724,14 +722,14 @@ const CONFIG = {
   ofertasA: [
     {
       image: 'oferta-pt-padrao.png',
-      checkout: 'https://pay.hotmart.com/R107831302K?checkoutMode=10',
+      checkout: 'https://pay.cakto.com.br/n5ntbz2_1235865',
       cta: 'QUERO O PLANO COMPLETO — R$ 47,00',
       alt: 'Plano Completo do Mounjaro de Chia por R$ 47,00',
       evento: 'checkout_click_padrao',
     },
     {
       image: 'oferta-pt-premium.png',
-      checkout: 'https://pay.hotmart.com/R107831302K?off=luezqcgt&checkoutMode=10',
+      checkout: 'https://pay.cakto.com.br/ymssjxz_1236269',
       cta: 'QUERO O PLANO PREMIUM — R$ 97,00',
       alt: 'Plano Premium Completo do Mounjaro de Chia por R$ 97,00',
       evento: 'checkout_click_premium',
@@ -741,14 +739,14 @@ const CONFIG = {
   ofertasB: [
     {
       image: 'oferta-pt-padrao.png',
-      checkout: 'https://pay.hotmart.com/R107831302K?checkoutMode=10',
+      checkout: 'https://pay.cakto.com.br/n5ntbz2_1235865',
       cta: 'QUERO O PLANO COMPLETO — R$ 47,00',
       alt: 'Plano Completo do Mounjaro de Chia por R$ 47,00',
       evento: 'checkout_click_padrao',
     },
     {
       image: 'oferta-pt-premium.png',
-      checkout: 'https://pay.hotmart.com/R107831302K?off=luezqcgt&checkoutMode=10',
+      checkout: 'https://pay.cakto.com.br/ymssjxz_1236269',
       cta: 'QUERO O PLANO PREMIUM — R$ 97,00',
       alt: 'Plano Premium Completo do Mounjaro de Chia por R$ 97,00',
       evento: 'checkout_click_premium',
@@ -1320,6 +1318,11 @@ function journeyParams() {
 function checkoutUrl(base) {
   const url = new URL(base);
   for (const [k, v] of Object.entries(utms)) url.searchParams.set(k, v);
+  /* O rastreador pode criar/atualizar o sck depois do carregamento inicial.
+     Lemos novamente a URL ao montar cada CTA para os dois checkouts sempre
+     receberem o código mais recente da sessão. */
+  const sckAtual = new URLSearchParams(location.search).get('sck');
+  if (sckAtual) url.searchParams.set('sck', sckAtual);
   if (state.nome) url.searchParams.set('name', state.nome);
   for (const [k, v] of Object.entries(journeyParams())) {
     if (v !== '' && v != null) url.searchParams.set(k, v);
